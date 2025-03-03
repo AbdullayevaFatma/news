@@ -7,5 +7,6 @@ export const store = configureStore({
   reducer:{
     login: loginReducer,
     news: newsReducer
-  }
+  },
+  devTools: process.env.NODE_ENV !== "production",
 })
