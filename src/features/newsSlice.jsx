@@ -9,11 +9,12 @@ const initialState = {
 
 export const getNews = createAsyncThunk("getNews", async () => {
   const API = import.meta.env.VITE_API_KEY;
-  const URL = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API}`;
+  const viteUrl = import.meta.env.VITE_API_URL;
+
+  const URL = `${viteUrl}${API}`;
   const { data } = await axios(URL);
   console.log(data);
   return data.articles;
-  
 });
 
 const newsSlice = createSlice({
@@ -23,23 +24,22 @@ const newsSlice = createSlice({
     clearNewsData: (state) => {
       state.newsData = [];
     },
-    
   },
   extraReducers: (builder) => {
     builder
-    .addCase(getNews.pending,(state)=>{
-      state.loading = true
-    })
-    .addCase(getNews.fulfilled, (state,{payload}) =>{
-      state.loading = false
-      state.newsData = payload
-    })
-    .addCase(getNews.rejected, (state) => {
-      state.loading = false
-      state.error = true
-    })
-  }
+      .addCase(getNews.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getNews.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.newsData = payload;
+      })
+      .addCase(getNews.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      });
+  },
 });
 
-export const {clearNewsData} = newsSlice.actions
- export default newsSlice.reducer
+export const { clearNewsData } = newsSlice.actions;
+export default newsSlice.reducer;
